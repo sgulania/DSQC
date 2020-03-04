@@ -3,3 +3,14 @@
 ## University of Southern California, Los Angeles, CA 
 
 ![QC-reduction](https://github.com/sgulania/DSQC/blob/master/Qcircuit.gif)
+
+Command to run :
+
+python rigetti_dsqc.py /path/to/advance_gates.txt
+
+or 
+
+python ibm_dsqc.py /path/to/advance_gates.txt
+
+
+The output contains both gates compressed and uncompressed scripts in OpenQASM, which is executable on IBM hardware and native Quil, which is executable on Rigetti's device.
