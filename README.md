@@ -2,4 +2,4 @@
 # Domain Specific Quantum Compiler 
 ## University of Southern California, Los Angeles, CA 
 
-![QC-reduction](https://github.com/sgulania/DSQC/Qcircuit.gif)
+![QC-reduction](https://github.com/sgulania/DSQC/blob/master/Qcircuit.gif)
