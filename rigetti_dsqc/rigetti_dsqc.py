@@ -1,12 +1,16 @@
-#Sahil Gulania
-#USC 2019
-
-# Domain Specific Quantum Compiler
-# Dynamic Simulations on Quantum Computers
+#############################################
+## Title: Rigetti Domain-Specific Compiler ##
+## Author: Sahil Gulania, Lindsay Bassman, ##                                  
+##         Connor Powers                   ##                                  
+## Date: 03/19/2020 #########################
 
 import numpy as np
+
 from qiskit import qiskit_code
 from rigetti import rigetti_code
+
+### This code assumes qubits are labeled 0,1,2,...,N and connected in that order ###
+
 lineList = [line.rstrip('\n') for line in open("advance_gates.txt")]
 count = len(lineList)
 
@@ -50,7 +54,6 @@ for i in range (0,count):
   #print(G[i],TH[i],AC1[i],AC2[i])   
 
 
-qiskit_code(G,TH,AC1,AC2,"qiskit_uncompressed.txt")
 rigetti_code(G,TH,AC1,AC2,"rigetti_uncompressed.txt")
 
 # Use CNOT = H CZ H 
@@ -293,6 +296,31 @@ while G[i] != "MEASURE":
           i1 = i1 + 1
      i = i + 1
 
+# Delete first RZs for each qubit                                                                 
+for j in range(0,maxq):                                                    
+    i=0                                                                         
+    while G[i] != "MEASURE":                                                    
+        if G[i]=="RZ" and AC1[i]==j:                                          
+            del G[i]                                                            
+            TH=np.delete(TH,i)                                                  
+            AC1=np.delete(AC1,i)                                                
+            AC2=np.delete(AC2,i)                                                
+        if (G[i]=="RX" and AC1[i]==j) or (G[i]=="CNOT" and (AC1[i]==j or AC2[i]==j)):
+            break                                                               
+        i=i+1    
 
-qiskit_code(G,TH,AC1,AC2,"qiskit_compressed.txt")
-rigetti_code(G,TH,AC1,AC2,"rigetti_compressed.txt")  
+# Deleye last RZs for each qubit                                                    
+for j in range(0,maxq+1):                                                  
+    i=-1                                                                        
+    while i>=-int(len(G)):                                                      
+        if G[i] == "H" and AC1[i]==j:                                         
+            break                                                               
+        if G[i] == "RZ" and AC1[i]==j:                                        
+            del G[i]
+            TH=np.delete(TH,i) 
+            AC1=np.delete(AC1,i)
+            AC2=np.delete(AC2,i)                                            
+            break                                                               
+        i=i-1    
+
+rigetti_code(G,TH,AC1,AC2,"rigetti_compressed.txt")
